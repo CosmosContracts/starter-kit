@@ -1,9 +1,9 @@
 module.exports = {
-  mode: 'jit',
+  mode: "jit",
   purge: {
     content: [
-      './pages/**/*.{js,ts,jsx,tsx}',
-      './components/**/*.{js,ts,jsx,tsx}',
+      "./pages/**/*.{js,ts,jsx,tsx}",
+      "./components/**/*.{js,ts,jsx,tsx}",
     ],
     options: {
       safelist: [/data-theme$/],
@@ -16,8 +16,8 @@ module.exports = {
   variants: {
     extend: {},
   },
-  plugins: [require('daisyui')],
+  plugins: [require("daisyui")],
   daisyui: {
-    themes: [require('./styles/daisyui-themes.json')],
+    themes: [require("./styles/daisyui-themes.json")],
   },
-}
+};
