@@ -1,81 +1,81 @@
-import { useState, useEffect, MouseEvent } from 'react'
-import type { NextPage } from 'next'
-import { StdFee, Coin } from '@cosmjs/amino'
+import { useState, useEffect, MouseEvent } from "react";
+import type { NextPage } from "next";
+import { StdFee, Coin } from "@cosmjs/amino";
 
-import WalletLoader from 'components/WalletLoader'
-import { useSigningClient } from 'contexts/cosmwasm'
+import WalletLoader from "components/WalletLoader";
+import { useSigningClient } from "contexts/cosmwasm";
 import {
   convertMicroDenomToDenom,
   convertFromMicroDenom,
   convertDenomToMicroDenom,
-} from 'util/conversion'
+} from "util/conversion";
 
-const PUBLIC_CHAIN_NAME = process.env.NEXT_PUBLIC_CHAIN_NAME
-const PUBLIC_STAKING_DENOM = process.env.NEXT_PUBLIC_STAKING_DENOM || 'ujuno'
+const PUBLIC_CHAIN_NAME = process.env.NEXT_PUBLIC_CHAIN_NAME;
+const PUBLIC_STAKING_DENOM = process.env.NEXT_PUBLIC_STAKING_DENOM || "ujuno";
 
 const Send: NextPage = () => {
-  const { walletAddress, signingClient } = useSigningClient()
-  const [balance, setBalance] = useState('')
-  const [loadedAt, setLoadedAt] = useState(new Date())
-  const [loading, setLoading] = useState(false)
-  const [recipientAddress, setRecipientAddress] = useState('')
-  const [sendAmount, setSendAmount] = useState('')
-  const [success, setSuccess] = useState('')
-  const [error, setError] = useState('')
+  const { walletAddress, signingClient } = useSigningClient();
+  const [balance, setBalance] = useState("");
+  const [loadedAt, setLoadedAt] = useState(new Date());
+  const [loading, setLoading] = useState(false);
+  const [recipientAddress, setRecipientAddress] = useState("");
+  const [sendAmount, setSendAmount] = useState("");
+  const [success, setSuccess] = useState("");
+  const [error, setError] = useState("");
 
   useEffect(() => {
     if (!signingClient || walletAddress.length === 0) {
-      return
+      return;
     }
-    setError('')
-    setSuccess('')
+    setError("");
+    setSuccess("");
 
     signingClient
       .getBalance(walletAddress, PUBLIC_STAKING_DENOM)
       .then((response: any) => {
-        const { amount, denom }: { amount: number; denom: string } = response
+        const { amount, denom }: { amount: number; denom: string } = response;
         setBalance(
           `${convertMicroDenomToDenom(amount)} ${convertFromMicroDenom(denom)}`
-        )
+        );
       })
       .catch((error) => {
-        setError(`Error! ${error.message}`)
-        console.log('Error signingClient.getBalance(): ', error)
-      })
-  }, [signingClient, walletAddress, loadedAt])
+        setError(`Error! ${error.message}`);
+        console.log("Error signingClient.getBalance(): ", error);
+      });
+  }, [signingClient, walletAddress, loadedAt]);
 
   const handleSend = (event: MouseEvent<HTMLElement>) => {
-    event.preventDefault()
-    setError('')
-    setSuccess('')
-    setLoading(true)
+    event.preventDefault();
+    setError("");
+    setSuccess("");
+    setLoading(true);
     const amount: Coin[] = [
       {
         amount: convertDenomToMicroDenom(sendAmount),
         denom: PUBLIC_STAKING_DENOM,
       },
-    ]
+    ];
 
     signingClient
-      ?.sendTokens(walletAddress, recipientAddress, amount)
+      ?.sendTokens(walletAddress, recipientAddress, amount, "auto")
       .then((resp) => {
-        console.log('resp', resp)
+        console.log("resp", resp);
 
         const message = `Success! Sent ${sendAmount}  ${convertFromMicroDenom(
           PUBLIC_STAKING_DENOM
-        )} to ${recipientAddress}.`
+        )} to ${recipientAddress}.`;
 
-        setLoadedAt(new Date())
-        setLoading(false)
-        setSendAmount('')
-        setSuccess(message)
+        setLoadedAt(new Date());
+        setLoading(false);
+        setSendAmount("");
+        setSuccess(message);
       })
       .catch((error) => {
-        setLoading(false)
-        setError(`Error! ${error.message}`)
-        console.log('Error signingClient.sendTokens(): ', error)
-      })
-  }
+        setLoading(false);
+        setError(`Error! ${error.message}`);
+        console.log("Error signingClient.sendTokens(): ", error);
+      });
+  };
   return (
     <WalletLoader loading={loading}>
       <p className="text-2xl">Your wallet has {balance}</p>
@@ -158,7 +158,7 @@ const Send: NextPage = () => {
         )}
       </div>
     </WalletLoader>
-  )
-}
+  );
+};
 
-export default Send
+export default Send;

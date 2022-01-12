@@ -1,6 +1,6 @@
-import { ReactNode } from 'react'
-import Head from 'next/head'
-import Nav from './Nav'
+import { ReactNode } from "react";
+import Head from "next/head";
+import Nav from "./Nav";
 
 export default function Layout({ children }: { children: ReactNode }) {
   return (
@@ -16,7 +16,7 @@ export default function Layout({ children }: { children: ReactNode }) {
         {children}
       </main>
       <footer className="flex items-center justify-center w-full h-24 border-t">
-        Powered by{' '}
+        Powered by{" "}
         <a
           className="pl-1 link link-primary link-hover"
           href="https://github.com/cosmos/cosmjs"
@@ -32,5 +32,5 @@ export default function Layout({ children }: { children: ReactNode }) {
         </a>
       </footer>
     </div>
-  )
+  );
 }

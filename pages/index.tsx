@@ -1,10 +1,10 @@
-import type { NextPage } from 'next'
-import Link from 'next/link'
-import WalletLoader from 'components/WalletLoader'
-import { useSigningClient } from 'contexts/cosmwasm'
+import type { NextPage } from "next";
+import Link from "next/link";
+import WalletLoader from "components/WalletLoader";
+import { useSigningClient } from "contexts/cosmwasm";
 
 const Home: NextPage = () => {
-  const { walletAddress } = useSigningClient()
+  const { walletAddress } = useSigningClient();
 
   return (
     <WalletLoader>
@@ -13,7 +13,7 @@ const Home: NextPage = () => {
       </h1>
 
       <div className="mt-3 text-2xl">
-        Your wallet address is:{' '}
+        Your wallet address is:{" "}
         <pre className="font-mono break-all whitespace-pre-wrap">
           {walletAddress}
         </pre>
@@ -30,7 +30,7 @@ const Home: NextPage = () => {
         </Link>
       </div>
     </WalletLoader>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;

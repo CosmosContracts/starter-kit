@@ -1,41 +1,41 @@
-import { ReactNode } from 'react'
-import { useSigningClient } from 'contexts/cosmwasm'
-import Loader from './Loader'
+import { ReactNode } from "react";
+import { useSigningClient } from "contexts/cosmwasm";
+import Loader from "./Loader";
 
 function WalletLoader({
   children,
   loading = false,
 }: {
-  children: ReactNode
-  loading?: boolean
+  children: ReactNode;
+  loading?: boolean;
 }) {
   const {
     walletAddress,
     loading: clientLoading,
     error,
     connectWallet,
-  } = useSigningClient()
+  } = useSigningClient();
 
   if (loading || clientLoading) {
     return (
       <div className="flex justify-center">
         <Loader />
       </div>
-    )
+    );
   }
 
-  if (walletAddress === '') {
+  if (walletAddress === "") {
     return (
       <div className="max-w-full">
         <h1 className="text-6xl font-bold">
-          Welcome to{' '}
+          Welcome to{" "}
           <a className="link link-primary link-hover" href="https://nextjs.org">
             Next.js!
           </a>
         </h1>
 
         <p className="mt-3 text-2xl">
-          Get started by installing{' '}
+          Get started by installing{" "}
           <a
             className="pl-1 link link-primary link-hover"
             href="https://keplr.app/"
@@ -57,14 +57,14 @@ function WalletLoader({
           </button>
         </div>
       </div>
-    )
+    );
   }
 
   if (error) {
-    return <code>{JSON.stringify(error)}</code>
+    return <code>{JSON.stringify(error)}</code>;
   }
 
-  return <>{children}</>
+  return <>{children}</>;
 }
 
-export default WalletLoader
+export default WalletLoader;

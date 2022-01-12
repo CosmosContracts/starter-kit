@@ -1,12 +1,12 @@
-import { convertFromMicroDenom } from 'util/conversion'
+import { convertFromMicroDenom } from "util/conversion";
 
 // extend window with CosmJS and Keplr properties
 interface CosmosKeplrWindow extends Window {
-  keplr: any
-  getOfflineSigner: Function
+  keplr: any;
+  getOfflineSigner: Function;
 }
 
-declare let window: CosmosKeplrWindow
+declare let window: CosmosKeplrWindow;
 
 export const connectKeplr = async () => {
   // Keplr extension injects the offline signer that is compatible with cosmJS.
@@ -14,12 +14,12 @@ export const connectKeplr = async () => {
   // And it also injects the helper function to `window.keplr`.
   // If `window.getOfflineSigner` or `window.keplr` is null, Keplr extension may be not installed on browser.
   if (!window.getOfflineSigner || !window.keplr) {
-    alert('Please install keplr extension')
+    alert("Please install keplr extension");
   } else {
     if (window.keplr.experimentalSuggestChain) {
       const stakingDenom = convertFromMicroDenom(
-        process.env.NEXT_PUBLIC_STAKING_DENOM || 'ujuno'
-      )
+        process.env.NEXT_PUBLIC_STAKING_DENOM || "ujuno"
+      );
 
       try {
         // Keplr v0.6.4 introduces an experimental feature that supports the feature to suggests the chain from a webpage.
@@ -110,12 +110,12 @@ export const connectKeplr = async () => {
             average: 0.025,
             high: 0.04,
           },
-        })
+        });
       } catch {
-        alert('Failed to suggest the chain')
+        alert("Failed to suggest the chain");
       }
     } else {
-      alert('Please use the recent version of keplr extension')
+      alert("Please use the recent version of keplr extension");
     }
   }
-}
+};
