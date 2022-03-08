@@ -9,6 +9,12 @@ const GasPrices = {
   high: 0.03,
 };
 
+declare global {
+  interface Window {
+    keplr: Keplr | undefined;
+  }
+}
+
 let keplr: Keplr | undefined;
 
 export async function getKeplr(): Promise<Keplr> {
