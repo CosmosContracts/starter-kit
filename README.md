@@ -3,9 +3,9 @@
 First, bootstrap your new project with this example using [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app):
 
 ```bash
-npx create-next-app -e https://github.com/ebaker/next-cosmwasm-keplr-starter my-cosmwasm-dapp
+npx create-next-app -e https://github.com/cosmoscontracts/starter-kit my-cosmwasm-dapp
 # or
-yarn create next-app -e https://github.com/ebaker/next-cosmwasm-keplr-starter my-cosmwasm-dapp
+yarn create next-app -e https://github.com/cosmoscontracts/starter-kit my-cosmwasm-dapp
 ```
 
 Next, setup your `.env` file by copying the example:
@@ -18,14 +18,25 @@ cp .env.example .env.local
 Then, run the development server:
 
 ```bash
-npm run dev
-# or
 yarn dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+
+In order to interact with a local chain, the easiest way is with docker:
+
+```sh
+docker run -it \
+  -p 26656:26656 \
+  -p 26657:26657 \
+  -e STAKE_TOKEN=ujunox \
+  ghcr.io/cosmoscontracts/juno:v2.1.0 \
+  ./setup_and_run.sh juno16g2rahf5846rxzp3fwlswy08fz8ccuwk03k57y
+```
+
+More information can be found [in the Juno docs here](https://docs.junonetwork.io/smart-contracts-and-junod-development/junod-local-dev-setup).
 
 ## Requirements
 
