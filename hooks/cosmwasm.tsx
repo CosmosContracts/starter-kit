@@ -1,6 +1,11 @@
 import { useState } from "react";
-import { connectKeplr } from "services/keplr";
-import { SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
+import { getKeplr, suggestChain } from "util/keplr";
+import {
+  SigningCosmWasmClient,
+  CosmWasmClient,
+} from "@cosmjs/cosmwasm-stargate";
+import { config } from "util/config";
+import { GasPrice } from "@cosmjs/stargate";
 
 export interface ISigningCosmWasmClientContext {
   walletAddress: string;
@@ -10,9 +15,6 @@ export interface ISigningCosmWasmClientContext {
   connectWallet: any;
   disconnect: Function;
 }
-
-const PUBLIC_RPC_ENDPOINT = process.env.NEXT_PUBLIC_CHAIN_RPC_ENDPOINT || "";
-const PUBLIC_CHAIN_ID = process.env.NEXT_PUBLIC_CHAIN_ID;
 
 export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
   const [walletAddress, setWalletAddress] = useState("");
@@ -25,20 +27,25 @@ export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
     setLoading(true);
 
     try {
-      await connectKeplr();
+      const chainId = config("chainId");
+      const keplr = await getKeplr();
+      suggestChain();
 
       // enable website to access kepler
-      await (window as any).keplr.enable(PUBLIC_CHAIN_ID);
+      await keplr.enable(config("chainId"));
 
       // get offline signer for signing txs
-      const offlineSigner = await (window as any).getOfflineSignerAuto(
-        PUBLIC_CHAIN_ID
-      );
+      const offlineSigner = await keplr.getOfflineSignerAuto(chainId);
 
       // make client
       const client = await SigningCosmWasmClient.connectWithSigner(
-        PUBLIC_RPC_ENDPOINT,
-        offlineSigner
+        config("rpcEndpoint"),
+        offlineSigner,
+        {
+          gasPrice: GasPrice.fromString(
+            `${config("gasPrice")}${config("coinDenom")}`
+          ),
+        }
       );
       setSigningClient(client);
 
@@ -69,4 +76,9 @@ export const useSigningCosmWasmClient = (): ISigningCosmWasmClientContext => {
     connectWallet,
     disconnect,
   };
+};
+
+export const getNonSigningClient = async () => {
+  const client = await CosmWasmClient.connect(config("rpcEndpoint"));
+  return client;
 };
